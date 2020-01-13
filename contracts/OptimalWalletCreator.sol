@@ -2,6 +2,7 @@ pragma solidity ^0.5.0;
 
 import "./brandedtoken-contracts/contracts/UtilityBrandedToken.sol";
 import "./openst-contracts/contracts/proxies/UserWalletFactory.sol";
+import "./brandedtoken-contracts/contracts/utilitytoken/contracts/organization/contracts/Organized.sol";
 
 
 /**
@@ -10,7 +11,7 @@ import "./openst-contracts/contracts/proxies/UserWalletFactory.sol";
  *        Two methods called in single transaction
  */
 
-contract OptimalCreateWallet is Organized {
+contract OptimalWalletCreator is Organized {
 
     address worker;
     address ubtContractAddr;
@@ -61,7 +62,7 @@ contract OptimalCreateWallet is Organized {
         onlyWorker    //might have to send user address since worker will be executing this call
     {
         string memory safeProxy;
-        string memory tokenHolderAddr; //return data from createWalletUser
+        string memory tokenHolderAddr; //return data from createWalletUser ---remove
 
         userWalletFactory = UserWalletFactory(walletFactoryContractAddr);
         (safeProxy, tokenHolderAddr) = userWalletFactory.createWalletUser(

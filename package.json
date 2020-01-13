@@ -2,10 +2,52 @@
   "name": "myrepo",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "dist/index.js",
+  "directories": {
+    "test": "test"
   },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenST/organization-contracts.git"
+  },
+  "keywords": [
+    "OpenST",
+    "OST",
+    "web3",
+    "Ethereum",
+    "ACL",
+    "permissions"
+  ],
   "author": "",
-  "license": "ISC"
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/OpenST/organization-contracts/issues"
+  },
+  "homepage": "https://openst.org/",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "abi-decoder": "1.2.0",
+    "assert": "1.4.1",
+    "bn.js": "4.11.8",
+    "chai": "4.2.0",
+    "eslint": "5.10.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-plugin-import": "2.14.0",
+    "eth-gas-reporter": "^0.2.14",
+    "fs-extra": "8.0.1",
+    "ganache-cli": "6.4.3",
+    "mocha": "5.2.0",
+    "openzeppelin-solidity": "2.1.1",
+    "truffle": "5.0.19",
+    "ts-generator": "0.0.8",
+    "typechain": "0.3.14",
+    "typescript": "3.4.5",
+    "web3": "^1.2.4"
+  },
+  "dependencies": {
+    "@openst/openst.js": "^0.10.0"
+  }
 }
