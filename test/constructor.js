@@ -1,8 +1,8 @@
 'use strict';
 
-const utils = require('../test_lib/utils');
-const { Event } = require('../test_lib/event_decoder');
-const { AccountProvider } = require('../test_lib/utils.js');
+const utils = require('./test_lib/utils');
+const { Event } = require('./test_lib/event_decoder');
+const { AccountProvider } = require('./test_lib/utils.js');
 
 const OptimalWalletCreator = artifacts.require('OptimalWalletCreator');
 
@@ -46,8 +46,9 @@ contract('OptimalWalletCreator::constructor', async(accounts) => {
             await utils.expectRevert(OptimalWalletCreator.new(
                 ubtContractAddr,
                 walletFactoryContractAddr,
-            ));
-
+            ),
+            'Error in setting state variables.'
+          );
         });
       });
     });

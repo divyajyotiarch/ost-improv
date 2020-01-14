@@ -1,53 +1,68 @@
 {
-  "name": "myrepo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/OpenST/organization-contracts.git"
-  },
-  "keywords": [
-    "OpenST",
-    "OST",
-    "web3",
-    "Ethereum",
-    "ACL",
-    "permissions"
-  ],
-  "author": "",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/OpenST/organization-contracts/issues"
-  },
-  "homepage": "https://openst.org/",
-  "files": [
-    "dist"
-  ],
-  "devDependencies": {
-    "abi-decoder": "1.2.0",
-    "assert": "1.4.1",
-    "bn.js": "4.11.8",
-    "chai": "4.2.0",
-    "eslint": "5.10.0",
-    "eslint-config-airbnb-base": "13.1.0",
-    "eslint-plugin-import": "2.14.0",
-    "eth-gas-reporter": "^0.2.14",
-    "fs-extra": "8.0.1",
-    "ganache-cli": "6.4.3",
-    "mocha": "5.2.0",
-    "openzeppelin-solidity": "2.1.1",
-    "truffle": "5.0.19",
-    "ts-generator": "0.0.8",
-    "typechain": "0.3.14",
-    "typescript": "3.4.5",
-    "web3": "^1.2.4"
-  },
-  "dependencies": {
-    "@openst/openst.js": "^0.10.0"
-  }
+    "name": "@openst/openst-contracts",
+    "version": "0.10.0",
+    "description": "Openst contracts provide ABIs and BINs for EVM smart contracts to enable developers to program token economies.",
+    "author": "OpenST Foundation Ltd.",
+    "license": "Apache-2.0",
+    "keywords": [
+        "ethereum",
+        "openst",
+        "token economy",
+        "token holder",
+        "token rules",
+        "recovery"
+    ],
+    "homepage": "https://openst.org",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/OpenST/openst-contracts.git"
+    },
+    "bugs": {
+        "url": "https://github.com/OpenST/openst-contracts/issues"
+    },
+    "files": [
+        "npm_package/dist"
+    ],
+    "main": "./npm_package/dist/index.js",
+    "scripts": {
+        "update": "git submodule update --init --recursive && npm ci && cd ./external/gnosis/safe-contracts && npm ci && cd -",
+        "compile": "./node_modules/.bin/truffle compile --all --reset",
+        "compile:gnosis": "cd ./external/gnosis/safe-contracts && ./node_modules/.bin/truffle compile --all --reset && cd -",
+        "compile:all": "npm-run-all compile compile:gnosis",
+        "lint:js": "find ./test -name \"*.js\" | xargs ./node_modules/.bin/eslint",
+        "lint:js:fix": "npm run lint:js -- --fix",
+        "lint:sol:solium": "./node_modules/.bin/solium --dir contracts/",
+        "lint:sol:solium:fix": "npm run lint:sol:solium -- --fix",
+        "lint:sol:slither": "npm run compile && ./tools/docker_run_slither.sh",
+        "test:contracts": "./node_modules/.bin/truffle test",
+        "test:package": "./npm_package/test/run_npm_package_test.sh",
+        "test:range": "./tools/test_range.sh",
+        "make:package": "node ./npm_package/make_package.js",
+        "prepack": "npm-run-all compile:all make:package",
+        "make:all": "npm-run-all lint:sol:solium lint:js compile:all test:contracts make:package test:package",
+        "ganache-cli": "./tools/run_ganache_cli.sh"
+    },
+    "devDependencies": {
+        "abi-decoder": "1.2.0",
+        "assert": "2.0.0",
+        "bn.js": "4.11.8",
+        "eslint": "5.16.0",
+        "eslint-config-airbnb-base": "13.1.0",
+        "eslint-plugin-import": "2.17.2",
+        "ethereumjs-util": "6.1.0",
+        "ethlint": "1.2.4",
+        "ganache-cli": "6.4.3",
+        "npm-run-all": "4.1.5",
+        "openzeppelin-solidity": "2.1.1",
+        "solc": "0.5.8",
+        "solium": "1.2.4",
+        "truffle": "5.0.19",
+        "web3": "^1.2.4",
+        "websocket": "1.0.28",
+        "@gnosis.pm/mock-contract": "github:gnosis/mock-contract#sol_0_5_0",
+        "eth-gas-reporter": "^0.2.14"
+    },
+    "dependencies": {
+        "@openst/openst.js": "^0.10.0"
+    }
 }

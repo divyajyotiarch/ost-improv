@@ -2,8 +2,8 @@ pragma solidity ^0.5.0;
 
 import "./brandedtoken-contracts/contracts/UtilityBrandedToken.sol";
 import "./openst-contracts/contracts/proxies/UserWalletFactory.sol";
+import "./brandedtoken-contracts/contracts/utilitytoken/contracts/organization/contracts/OrganizationInterface.sol";
 import "./brandedtoken-contracts/contracts/utilitytoken/contracts/organization/contracts/Organized.sol";
-
 
 /**
  * @title Allows to call function createUserWallet from UserWalletFactory
@@ -13,10 +13,7 @@ import "./brandedtoken-contracts/contracts/utilitytoken/contracts/organization/c
 
 contract OptimalWalletCreator is Organized {
 
-    address worker;
-    address ubtContractAddr;
-    address walletFactoryContractAddr;
-    UserWalletFactory walletFactory;
+    UserWalletFactory userWalletFactory;
     UtilityBrandedToken utilityBrandedToken;
 
 
@@ -26,9 +23,8 @@ contract OptimalWalletCreator is Organized {
     )
     public
     {
-        worker = msg.sender();
-        ubtContractAddr = _ubtContractAddr;
-        walletFactoryContractAddr = _walletFactoryContractAddr;
+        userWalletFactory = UserWalletFactory(_walletFactoryContractAddr);
+        utilityBrandedToken = UtilityBrandedToken(_ubtContractAddr);
     }
 
     /**
@@ -57,15 +53,13 @@ contract OptimalWalletCreator is Organized {
         address _tokenRules,
         address[] calldata _sessionKeys,
         uint256[] calldata _sessionKeysSpendingLimits,
-        uint256[] calldata _sessionKeysExpirationHeights
-    )  external
+        uint256[] calldata _sessionKeysExpirationHeights,
+        address[] calldata _internalActors
+    )  
+        external
         onlyWorker    //might have to send user address since worker will be executing this call
-    {
-        string memory safeProxy;
-        string memory tokenHolderAddr; //return data from createWalletUser ---remove
-
-        userWalletFactory = UserWalletFactory(walletFactoryContractAddr);
-        (safeProxy, tokenHolderAddr) = userWalletFactory.createWalletUser(
+    { 
+        userWalletFactory.createUserWallet(
         _gnosisSafeMasterCopy,
         _gnosisSafeData,
         _tokenHolderMasterCopy,
@@ -78,12 +72,10 @@ contract OptimalWalletCreator is Organized {
         /*
         first call to createWalletUser with all above parameters
         */
-        
-        utilityBrandedToken = UtilityBrandedToken(ubtContractAddr);
-        utilityBrandedToken.registerInternalActors(worker);
 
+        utilityBrandedToken.registerInternalActors(_internalActors);
         /*
-        * second call to registerInternalActors from UtilityBrandedToken with msg.sender() as parameter
+        * second call to registerInternalActors from UtilityBrandedToken
         * considering that this contract is set as a worker already by an organization 
         */
     } 
