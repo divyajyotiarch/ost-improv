@@ -27,11 +27,14 @@ contract OptimalWalletCreator is Organized {
         utilityBrandedToken = UtilityBrandedToken(_ubtContractAddr);
     }
 
+    /* External Functions  */
+
     /**
     * @notice Create a new gnosis safe proxy and executes a
     *         message call to the newly created proxy. Afterwards, in the same
     *         transaction, creates a new token holder proxy by specifying
     *         as an owner the newly created gnosis safe proxy contract.
+    *         Registers internal actors.
     *
     * @param _gnosisSafeMasterCopy The address of a master copy of gnosis safe.
     * @param _gnosisSafeData The message data to be called on a newly created
@@ -43,6 +46,7 @@ contract OptimalWalletCreator is Organized {
     * @param _sessionKeys Session key addresses to authorize.
     * @param _sessionKeysSpendingLimits Session keys' spending limits.
     * @param _sessionKeysExpirationHeights Session keys' expiration heights.
+    * @param _internalActors Array of addresses of the internal actors to register.
     */
 
     function optimalCall(
@@ -55,10 +59,10 @@ contract OptimalWalletCreator is Organized {
         uint256[] calldata _sessionKeysSpendingLimits,
         uint256[] calldata _sessionKeysExpirationHeights,
         address[] calldata _internalActors
-    )  
+    )
         external
-        onlyWorker    //might have to send user address since worker will be executing this call
-    { 
+        onlyWorker
+    {
         userWalletFactory.createUserWallet(
         _gnosisSafeMasterCopy,
         _gnosisSafeData,
@@ -76,7 +80,7 @@ contract OptimalWalletCreator is Organized {
         utilityBrandedToken.registerInternalActors(_internalActors);
         /*
         * second call to registerInternalActors from UtilityBrandedToken
-        * considering that this contract is set as a worker already by an organization 
+        * considering that this contract is set as a worker already by the organization
         */
-    } 
+    }
 }
