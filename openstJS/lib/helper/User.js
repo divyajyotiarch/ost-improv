@@ -20,6 +20,7 @@ class User {
    * @param {string} tokenRules The address of TokenRules contract.
    * @param {string} userWalletFactory The address of UserWalletFactory contract.
    * @param {string} proxyFactory The address of ProxyFactory contract.
+   * @param {string} optimalWalletCreator The address of OptimalWalletCreator contract.
    * @param {Web3} auxiliaryWeb3 Auxiliary chain's web3 object.
    */
   constructor(
@@ -31,6 +32,7 @@ class User {
     tokenRules,
     userWalletFactory,
     proxyFactory,
+    optimalWalletCreator,
     auxiliaryWeb3
   ) {
     this.tokenHolderMasterCopy = tokenHolderMasterCopy;
@@ -41,6 +43,7 @@ class User {
     this.tokenRules = tokenRules;
     this.userWalletFactory = userWalletFactory;
     this.proxyFactory = proxyFactory;
+    this.optimalWalletCreator = optimalWalletCreator;
     this.auxiliaryWeb3 = auxiliaryWeb3;
     this.abiBinProvider = new AbiBinProvider();
   }
