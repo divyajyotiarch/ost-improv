@@ -45,7 +45,7 @@ const setup = async (
   const userWalletFactory = await UserWalletFactory.deploy(auxiliaryWeb3, userWalletFactoryTxOptions);
   const proxyFactory = await ProxyFactory.deploy(auxiliaryWeb3, proxyFactoryTxOptions);
   const createAndAddModules = await CreateAndAddModules.deploy(auxiliaryWeb3, createAndAddModulesTxOptions);
-  const optimalWalletCreator = await OptimalWalletCreator.deploy(auxiliaryWeb3, optimalWalletCreatorTxOptions)
+  const optimalWalletCreator = await OptimalWalletCreator.deploy(auxiliaryWeb3, optimalWalletCreatorTxOptions);
 
   return {
     tokenHolder,

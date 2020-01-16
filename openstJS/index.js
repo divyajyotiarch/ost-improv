@@ -21,6 +21,7 @@ const CreateAndAddModules = require('./lib/ContractInteract/CreateAndAddModules'
 const TokenRules = require('./lib/ContractInteract/TokenRules');
 const PricerRule = require('./lib/ContractInteract/PricerRule');
 const Mosaic = require('@openst/mosaic.js');
+const OptimalWalletCreator = require('./lib/ContractInteract/OptimalWalletCreator');
 
 // OpenST Setup
 const SetupOpenst = require('./lib/Setup');
@@ -56,6 +57,7 @@ module.exports = {
     CreateAndAddModules: CreateAndAddModules,
     TokenRules: TokenRules,
     PricerRule: PricerRule,
-    Organization: Mosaic.ContractInteract.Organization
+    Organization: Mosaic.ContractInteract.Organization,
+    OptimalWalletCreator: OptimalWalletCreator
   }
 };
