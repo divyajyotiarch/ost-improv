@@ -10,6 +10,7 @@ const UserWalletFactoryContractName = 'UserWalletFactory';
 const ProxyFactoryContractName = 'ProxyFactory';
 const CreateAndAddModulesContractName = 'CreateAndAddModules';
 const DelayedRecoveryModuleMasterCopyContractName = 'DelayedRecoveryModule';
+const OptimalWalletCreatorContractName = 'OptimalWalletCreator';
 
 /**
  * Performs setup and deployment tasks for user.
@@ -131,6 +132,30 @@ class User {
   }
 
   /**
+   * Deploys OptimalWalletCreator contract.
+   *
+   * @param txOptions Tx options.
+   * @param {address} ubtContractAddr UtilityBrandedToken Contract address
+   * @param {address} userWalletFactoryContractAddr UserWalletFactory Contract address
+   *
+   * @returns {Object} - Transaction receipt.
+   */
+  async deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryContractAddr) {
+    const oThis = this;
+
+    const txObject = oThis._deployOptimalWalletCreatorRawTx(ubtContractAddr, userWalletFactoryContractAddr);
+
+    const txReceipt = await new Deployer(
+      OptimalWalletCreatorContractName,
+      txObject,
+      oThis.auxiliaryWeb3,
+      txOptions
+    ).deploy();
+
+    return txReceipt;
+  }
+
+  /**
    * Deploys ProxyFactory contract.
    *
    * @param txOptions Tx options.
@@ -231,23 +256,26 @@ class User {
   }
 
   /**
-   * Private method which deploys UserWalletFactory contract.
+   * Private method which deploys OptimalWalletCreator contract.
+   *
+   * @param {address} ubtContractAddr UtilityBrandedToken Contract address
+   * @param {address} userWalletFactoryContractAddr UserWalletFactory Contract address
    *
    * @returns {txObject} Transaction object.
    * @private
    */
-  _deployUserWalletFactoryRawTx() {
+  _deployOptimalWalletCreatorRawTx(ubtContractAddr, userWalletFactoryContractAddr) {
     const oThis = this;
 
     const abiBinProvider = oThis.abiBinProvider;
-    const jsonInterface = abiBinProvider.getABI(UserWalletFactoryContractName);
-    const bin = abiBinProvider.getBIN(UserWalletFactoryContractName);
+    const jsonInterface = abiBinProvider.getABI(OptimalWalletCreatorContractName);
+    const bin = abiBinProvider.getBIN(OptimalWalletCreatorContractName);
 
     const contract = new oThis.auxiliaryWeb3.eth.Contract(jsonInterface, null);
 
     return contract.deploy({
       data: bin,
-      arguments: []
+      arguments: [ubtContractAddr, userWalletFactoryContractAddr]
     });
   }
 

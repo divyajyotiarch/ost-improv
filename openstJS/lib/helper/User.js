@@ -237,6 +237,55 @@ class User {
   }
 
   /**
+   * It is used for creation and configuration of gnosis safe and token holder
+   * proxy contract for user and  registers internal actors
+   *
+   * @param {Array} owners List of owners of the multisig.
+   * @param {string} threshold Number of required confirmations for a Safe transaction.
+   * @param {string} recoveryOwnerAddress  An address that signs the "recovery
+   *                              initiation/abortion" and "reset recovery owner"
+   *                              requests.
+   * @param {string} recoveryControllerAddress An address that relays signed requests of
+   *                                  different types.
+   * @param {string} recoveryBlockDelay A required number of blocks to pass to
+   *                           be able to execute a recovery request.
+   * @param {Array} sessionKeys Session key addresses to authorize.
+   * @param {Array} sessionKeysSpendingLimits Session key's spending limits.
+   * @param {Array} sessionKeysExpirationHeights Session key's expiration heights.
+   * @param {Array} internalActors Array of addresses of the internal actors to register.
+   * @param {Object} txOptions Tx options. (can be called only by worker)
+   *
+   * @returns {Promise<Object>} Promise that resolves to transaction receipt.
+   */
+  async optimalCall(
+    owners,
+    threshold,
+    recoveryOwnerAddress,
+    recoveryControllerAddress,
+    recoveryBlockDelay,
+    sessionKeys,
+    sessionKeysSpendingLimits,
+    sessionKeysExpirationHeights,
+    internalActors,
+    txOptions
+  ) {
+    const txObject = await this._optimalCallRawTx(
+      owners,
+      threshold,
+      recoveryOwnerAddress,
+      recoveryControllerAddress,
+      recoveryBlockDelay,
+      sessionKeys,
+      sessionKeysSpendingLimits,
+      sessionKeysExpirationHeights,
+      internalActors
+    );
+
+    return Utils.sendTransaction(txObject, txOptions);
+  }
+
+
+  /**
    * Method for creation and configuration of token holder proxy contract for company
    * with hardware wallet as it's owner.
    *
@@ -305,6 +354,60 @@ class User {
         sessionKeys,
         sessionKeysSpendingLimits,
         sessionKeysExpirationHeights
+      )
+    );
+  }
+
+  /**
+   * Private method used for creation and configuration of gnosis safe and
+   * tokenholder contract for an user.
+   *
+   * @param {Array} owners List of owners of the multisig.
+   * @param {string} threshold Number of required confirmations for a Safe transaction.
+   * @param {string} recoveryOwnerAddress  An address that signs the "recovery
+   *                              initiation/abortion" and "reset recovery owner"
+   *                              requests.
+   * @param {string} recoveryControllerAddress An address that relays signed requests of
+   *                                  different types.
+   * @param {string} recoveryBlockDelay A required number of blocks to pass to
+   *                           be able to execute a recovery request.
+   * @param {Array} sessionKeys Session key addresses to authorize.
+   * @param {Array} sessionKeysSpendingLimits Session key's spending limits.
+   * @param {Array} sessionKeysExpirationHeights Session key's expiration heights.
+   * @param {Array} internalActors Array of addresses of the internal actors to register.
+   *
+   * @returns {Promise<Object>} Promise that resolves to raw transaction object.
+   */
+  _optimalCallRawTx(
+    owners,
+    threshold,
+    recoveryOwnerAddress,
+    recoveryControllerAddress,
+    recoveryBlockDelay,
+    sessionKeys,
+    sessionKeysSpendingLimits,
+    sessionKeysExpirationHeights,
+    internalActors
+  ) {
+    const gnosisSafeData = this.getGnosisSafeData(
+      owners,
+      threshold,
+      recoveryOwnerAddress,
+      recoveryControllerAddress,
+      recoveryBlockDelay
+    );
+    const contract = Contracts.getOptimalWalletCreator(this.auxiliaryWeb3, this.userWalletFactory);
+    return Promise.resolve(
+      contract.methods.optimalCall(
+        this.gnosisSafeMasterCopy,
+        gnosisSafeData,
+        this.tokenHolderMasterCopy,
+        this.eip20Token,
+        this.tokenRules,
+        sessionKeys,
+        sessionKeysSpendingLimits,
+        sessionKeysExpirationHeights,
+        internalActors
       )
     );
   }

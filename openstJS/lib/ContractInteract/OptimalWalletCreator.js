@@ -46,12 +46,14 @@ const ContractName = 'OptimalWalletCreator';
    * Deploys OptimalWalletCreator master copy contract.
    *
    * @param {Web3} auxiliaryWeb3 Auxiliary chain web3 object.
-   * @param {Object} txOptions Tx options.
+   * @param {Object} txOptions Tx options. 
+   * @param {address} ubtContractAddr UtilityBrandedToken Contract address
+   * @param {address} userWalletFactoryContractAddr UserWalletFactory Contract address
    *
    * @returns {Promise<OptimalWalletCreator>} Promise containing the OptimalWalletCreator
    *                                  instance that has been deployed.
    */
-  static async deploy(auxiliaryWeb3, txOptions) {
+  static async deploy(auxiliaryWeb3, txOptions, ubtContractAddr, userWalletFactoryContractAddr) {
     if (!txOptions) {
       const err = new TypeError('Invalid transaction options.');
       return Promise.reject(err);
@@ -61,7 +63,7 @@ const ContractName = 'OptimalWalletCreator';
       return Promise.reject(err);
     }
 
-    const tx = OptimalWalletCreator.deployRawTx(auxiliaryWeb3);
+    const tx = OptimalWalletCreator.deployRawTx(auxiliaryWeb3, , ubtContractAddr, userWalletFactoryContractAddr);
 
     return Utils.sendTransaction(tx, txOptions).then((txReceipt) => {
       const address = txReceipt.contractAddress;
@@ -73,17 +75,19 @@ const ContractName = 'OptimalWalletCreator';
    * Method which returns Tx object to deploy OptimalWalletCreator contract.
    *
    * @param {Web3} auxiliaryWeb3 Auxiliary chain web3 object.
+   * @param {address} ubtContractAddr UtilityBrandedToken Contract address
+   * @param {address} userWalletFactoryContractAddr UserWalletFactory Contract address
    *
    * @returns {Object} Raw transaction object.
    */
-  static deployRawTx(auxiliaryWeb3) {
+  static deployRawTx(auxiliaryWeb3, ubtContractAddr, userWalletFactoryContractAddr) {
     if (!(auxiliaryWeb3 instanceof Web3)) {
       throw new TypeError(`Mandatory Parameter 'auxiliaryWeb3' is missing or invalid: ${auxiliaryWeb3}`);
     }
     const abiBinProvider = new AbiBinProvider();
     const bin = abiBinProvider.getBIN(ContractName);
 
-    const args = [];
+    const args = [ubtContractAddr, userWalletFactoryContractAddr];
     const contract = Contracts.getOptimalWalletCreator(auxiliaryWeb3);
 
     return contract.deploy({

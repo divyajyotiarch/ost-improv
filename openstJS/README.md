@@ -187,6 +187,24 @@ userSetup.deployUserWalletFactory(txOptions).then(function(response){
 
 ```
 
+### Deploy OptimalWalletCreator Contract
+
+```ubtContractAddress ``` is the UtilityBrandedToken contract address. Refer [brandedtoken.js](https://github.com/OpenST/brandedtoken.js) to get the contract address. 
+
+```js
+txOptions = {
+  from: deployerAddress,
+  gasPrice: gasPrice,
+  gas: gas
+};
+const userSetup = new OpenST.Setup.User(web3Provider);
+let optimalWalletCreatorAddress;
+userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddress, userWalletFactoryContractAddress).then(function(response){
+  optimalWalletCreatorAddress = response.receipt.contractAddress;
+});
+
+```
+
 ### Deploy ProxyFactory Contract
 
 ```js
