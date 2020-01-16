@@ -189,7 +189,7 @@ userSetup.deployUserWalletFactory(txOptions).then(function(response){
 
 ### Deploy OptimalWalletCreator Contract
 
-```ubtContractAddress ``` is the UtilityBrandedToken contract address. Refer [brandedtoken.js](https://github.com/OpenST/brandedtoken.js) to get the contract address. 
+```ubtContractAddress``` is the UtilityBrandedToken contract address. Refer [brandedtoken.js](https://github.com/OpenST/brandedtoken.js) to get the contract address. 
 
 ```js
 txOptions = {
@@ -511,4 +511,4 @@ Tests require docker-compose. To run the tests, execute below command from root 
     // For integration tests.
     npm run test:integration
 
-```   
+```  
