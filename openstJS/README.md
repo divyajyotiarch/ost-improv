@@ -193,7 +193,7 @@ userSetup.deployUserWalletFactory(txOptions).then(function(response){
 
 ```js
 txOptions = {
-  from: deployerAddress,
+  from: worker,
   gasPrice: gasPrice,
   gas: gas
 };
