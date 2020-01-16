@@ -396,7 +396,7 @@ class User {
       recoveryControllerAddress,
       recoveryBlockDelay
     );
-    const contract = Contracts.getOptimalWalletCreator(this.auxiliaryWeb3, this.userWalletFactory);
+    const contract = Contracts.getOptimalWalletCreator(this.auxiliaryWeb3, this.optimalWalletCreator);
     return Promise.resolve(
       contract.methods.optimalCall(
         this.gnosisSafeMasterCopy,
