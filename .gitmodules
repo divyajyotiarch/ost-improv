@@ -1,0 +1,3 @@
+[submodule "OptContracts/contracts/openst-contracts"]
+	path = OptContracts/contracts/openst-contracts
+	url = https://github.com/divyajyotiuk/openst-contracts.git
