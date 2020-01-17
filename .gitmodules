@@ -1,3 +1,6 @@
 [submodule "OptContracts/contracts/openst-contracts"]
 	path = OptContracts/contracts/openst-contracts
 	url = https://github.com/divyajyotiuk/openst-contracts.git
+[submodule "OptContracts/contracts/brandedtoken-contracts"]
+	path = OptContracts/contracts/brandedtoken-contracts
+	url = https://github.com/divyajyotiuk/brandedtoken-contracts.git
