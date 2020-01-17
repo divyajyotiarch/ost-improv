@@ -63,6 +63,8 @@
         "eth-gas-reporter": "^0.2.14"
     },
     "dependencies": {
-        "@openst/openst.js": "^0.10.0"
+        "@openst/openst.js": "^0.10.0",
+        "@openst/brandedtoken-contracts": ">=0.10.0 <0.11.0",
+        "@openst/openst-contracts": ">=0.10.0 <0.11.0"
     }
 }
