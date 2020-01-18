@@ -199,7 +199,7 @@ txOptions = {
 };
 const userSetup = new OpenST.Setup.User(web3Provider);
 let optimalWalletCreatorAddress;
-userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddress, userWalletFactoryContractAddress).then(function(response){
+userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddress, userWalletFactoryContractAddress, organizationAddress).then(function(response){
   optimalWalletCreatorAddress = response.receipt.contractAddress;
 });
 

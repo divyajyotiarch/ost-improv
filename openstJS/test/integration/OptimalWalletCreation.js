@@ -145,10 +145,10 @@ describe('Optimal Wallet Creation', async function() {
 	it('Performs setup of OptimalWalletCreator contract', async function() {
 	    const userSetup = new UserSetup(auxiliaryWeb3);
 
-	    const OptimalWalletCreatorResponse = await userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryAddress);
+	    const OptimalWalletCreatorResponse = await userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryAddress, organizationAddr);
 	    optimalWalletCreatorAddress = optimalWalletCreatorResponse.receipt.contractAddress;
 	    optimalWalletCreatorInstance = optimalWalletCreatorResponse.instance;
-	    assert.isNotNull(userWalletFactoryAddress, 'OptimalWalletCreator contract address should not be null.');
+	    assert.isNotNull(optimalWalletCreatorAddress, 'OptimalWalletCreator contract address should not be null.');
 
 	  });
 

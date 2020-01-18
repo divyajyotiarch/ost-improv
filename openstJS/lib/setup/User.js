@@ -140,10 +140,10 @@ class User {
    *
    * @returns {Object} - Transaction receipt.
    */
-  async deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryContractAddr) {
+  async deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryContractAddr, organizationAddr) {
     const oThis = this;
 
-    const txObject = oThis._deployOptimalWalletCreatorRawTx(ubtContractAddr, userWalletFactoryContractAddr);
+    const txObject = oThis._deployOptimalWalletCreatorRawTx(ubtContractAddr, userWalletFactoryContractAddr, organizationAddress);
 
     const txReceipt = await new Deployer(
       OptimalWalletCreatorContractName,
@@ -264,7 +264,7 @@ class User {
    * @returns {txObject} Transaction object.
    * @private
    */
-  _deployOptimalWalletCreatorRawTx(ubtContractAddr, userWalletFactoryContractAddr) {
+  _deployOptimalWalletCreatorRawTx(ubtContractAddr, userWalletFactoryContractAddr, organizationAddr) {
     const oThis = this;
 
     const abiBinProvider = oThis.abiBinProvider;
@@ -275,7 +275,7 @@ class User {
 
     return contract.deploy({
       data: bin,
-      arguments: [ubtContractAddr, userWalletFactoryContractAddr]
+      arguments: [ubtContractAddr, userWalletFactoryContractAddr, organizationAddr]
     });
   }
 

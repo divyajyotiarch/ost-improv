@@ -53,7 +53,7 @@ const ContractName = 'OptimalWalletCreator';
    * @returns {Promise<OptimalWalletCreator>} Promise containing the OptimalWalletCreator
    *                                  instance that has been deployed.
    */
-  static async deploy(auxiliaryWeb3, txOptions, ubtContractAddr, userWalletFactoryContractAddr) {
+  static async deploy(auxiliaryWeb3, txOptions, ubtContractAddr, userWalletFactoryContractAddr, organizationAddr) {
     if (!txOptions) {
       const err = new TypeError('Invalid transaction options.');
       return Promise.reject(err);
@@ -63,7 +63,7 @@ const ContractName = 'OptimalWalletCreator';
       return Promise.reject(err);
     }
 
-    const tx = OptimalWalletCreator.deployRawTx(auxiliaryWeb3, , ubtContractAddr, userWalletFactoryContractAddr);
+    const tx = OptimalWalletCreator.deployRawTx(auxiliaryWeb3, , ubtContractAddr, userWalletFactoryContractAddr, organizationAddr);
 
     return Utils.sendTransaction(tx, txOptions).then((txReceipt) => {
       const address = txReceipt.contractAddress;
@@ -80,14 +80,14 @@ const ContractName = 'OptimalWalletCreator';
    *
    * @returns {Object} Raw transaction object.
    */
-  static deployRawTx(auxiliaryWeb3, ubtContractAddr, userWalletFactoryContractAddr) {
+  static deployRawTx(auxiliaryWeb3, ubtContractAddr, userWalletFactoryContractAddr, organizationAddr) {
     if (!(auxiliaryWeb3 instanceof Web3)) {
       throw new TypeError(`Mandatory Parameter 'auxiliaryWeb3' is missing or invalid: ${auxiliaryWeb3}`);
     }
     const abiBinProvider = new AbiBinProvider();
     const bin = abiBinProvider.getBIN(ContractName);
 
-    const args = [ubtContractAddr, userWalletFactoryContractAddr];
+    const args = [ubtContractAddr, userWalletFactoryContractAddr, organizationAddr];
     const contract = Contracts.getOptimalWalletCreator(auxiliaryWeb3);
 
     return contract.deploy({
