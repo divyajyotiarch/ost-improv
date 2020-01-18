@@ -23,6 +23,7 @@ const web3 = require('web3');
 const NULL_ADDRESS = '0x0000000000000000000000000000000000000000';
 const NULL_BYTES32 = '0x0000000000000000000000000000000000000000000000000000000000000000';
 const MAX_UINT256 = new BN(2).pow(new BN(256)).sub(new BN(1));
+const MockOrganization = artifacts.require('MockOrganization');
 
 module.exports.NULL_ADDRESS = NULL_ADDRESS;
 module.exports.NULL_BYTES32 = NULL_BYTES32;
@@ -96,3 +97,19 @@ module.exports.AccountProvider = class AccountProvider {
     return account;
   }
 };
+
+/**
+ * Creates an instance of MockOrganization contract and sets worker.
+ */
+module.exports.setupOrganization = async (worker, organization) => {
+
+  const mockOrganization = await MockOrganization.new(
+    organization,
+    worker,
+  );
+
+  return {
+    mockOrganization, worker, organization,
+  };
+};
+

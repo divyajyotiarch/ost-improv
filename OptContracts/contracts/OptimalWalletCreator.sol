@@ -16,7 +16,6 @@ contract OptimalWalletCreator is Organized {
     UserWalletFactory userWalletFactory;
     UtilityBrandedToken utilityBrandedToken;
 
-
     constructor(
         address _ubtContractAddr,
         address _walletFactoryContractAddr,

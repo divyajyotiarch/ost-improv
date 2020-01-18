@@ -11,6 +11,7 @@ const UserSetup = Package.Setup.User;
 const { Contracts } = Package;
 const { Organization } = Package.ContractInteract;
 const { UtilityBrandedToken } = Package.ContractInteract;
+const { OptimalWalletCreator } = Package.ContractInteract;
 const TokenHolderHelper = Package.Helpers.TokenHolder;
 const abiBinProvider = new Package.AbiBinProvider();
 
@@ -128,26 +129,35 @@ describe('Optimal Wallet Creation', async function() {
 
 
 	it('Performs setup of UtilityBrandedToken contract', async function() {
-		const ubtConfig = {
-             deployer: deployerAddress,
-             token: eip20Token,
-             symbol: "BT",
-             name: "MyBrandedToken",
-             decimals: "18",
-             organization: organizationAddr
-          }
 
-		const ubtContractInstance = await UtilityBrandedToken.setup(auxiliaryWeb3, ubtConfig, txOptions);
-    	ubtContractAddr = ubtContractInstance.address;
+    const utilityBrandedToken = await UtilityBrandedToken.deploy(
+      auxiliaryWeb3,
+      eip20Token,
+      "BT",
+      "MyBrandedToken",
+      "18",
+      organizationAddr,
+      txOptions
+    );
+    	ubtContractAddr = utilityBrandedToken.address;
 
 	  });
 
 	it('Performs setup of OptimalWalletCreator contract', async function() {
-	    const userSetup = new UserSetup(auxiliaryWeb3);
+/*	    const userSetup = new UserSetup(auxiliaryWeb3);
 
-	    const OptimalWalletCreatorResponse = await userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryAddress, organizationAddr);
+	    const optimalWalletCreatorResponse = await userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryAddress, organizationAddr);
 	    optimalWalletCreatorAddress = optimalWalletCreatorResponse.receipt.contractAddress;
-	    optimalWalletCreatorInstance = optimalWalletCreatorResponse.instance;
+      optimalWalletCreatorInstance = optimalWalletCreatorResponse.instance;
+      */
+      optimalWalletCreatorInstance = await OptimalWalletCreator.deploy(
+        auxiliaryWeb3,
+        txOptions,
+        ubtContractAddr,
+        userWalletFactoryAddress,
+        organizationAddr
+      )
+      optimalWalletCreatorAddress = optimalWalletCreatorInstance.address;
 	    assert.isNotNull(optimalWalletCreatorAddress, 'OptimalWalletCreator contract address should not be null.');
 
 	  });
@@ -197,9 +207,6 @@ describe('Optimal Wallet Creation', async function() {
     );
 
     assert.strictEqual(response.status, true, 'optimalCall failed.');
-		
 	});
-
-
  });
 

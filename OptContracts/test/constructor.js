@@ -3,7 +3,7 @@
 const utils = require('./test_lib/utils');
 const { Event } = require('./test_lib/event_decoder');
 const { AccountProvider } = require('./test_lib/utils.js');
-
+const MockContract = artifacts.require("./MockContract.sol");
 const OptimalWalletCreator = artifacts.require('OptimalWalletCreator');
 
 contract('OptimalWalletCreator::constructor', async(accounts) => {
@@ -12,6 +12,7 @@ contract('OptimalWalletCreator::constructor', async(accounts) => {
     let walletFactoryContractAddr;
     let organizationAddr;
     let accountProvider;
+    let mock;
     
     beforeEach(async () => {
         
@@ -19,7 +20,7 @@ contract('OptimalWalletCreator::constructor', async(accounts) => {
         ubtContractAddr = accountProvider.get();
         walletFactoryContractAddr = accountProvider.get();
         organizationAddr = accountProvider.get();
-       
+        mock = await MockContract.new();
       });
 
 
@@ -35,6 +36,9 @@ contract('OptimalWalletCreator::constructor', async(accounts) => {
         });
 
         it('Reverts if null address is passed as ubtContractAddr', async () => {
+          
+          await mock.givenAnyReturnBool(true);
+          
           await utils.expectRevert(OptimalWalletCreator.new(
             utils.NULL_ADDRESS,
             walletFactoryContractAddr,

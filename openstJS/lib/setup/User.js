@@ -143,7 +143,7 @@ class User {
   async deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryContractAddr, organizationAddr) {
     const oThis = this;
 
-    const txObject = oThis._deployOptimalWalletCreatorRawTx(ubtContractAddr, userWalletFactoryContractAddr, organizationAddress);
+    const txObject = oThis._deployOptimalWalletCreatorRawTx(ubtContractAddr, userWalletFactoryContractAddr, organizationAddr);
 
     const txReceipt = await new Deployer(
       OptimalWalletCreatorContractName,
@@ -254,6 +254,27 @@ class User {
       arguments: []
     });
   }
+/**
+   * Private method which deploys UserWalletFactory contract.
+   *
+   * @returns {txObject} Transaction object.
+   * @private
+   */
+  _deployUserWalletFactoryRawTx() {
+    const oThis = this;
+
+    const abiBinProvider = oThis.abiBinProvider;
+    const jsonInterface = abiBinProvider.getABI(UserWalletFactoryContractName);
+    const bin = abiBinProvider.getBIN(UserWalletFactoryContractName);
+
+    const contract = new oThis.auxiliaryWeb3.eth.Contract(jsonInterface, null);
+
+    return contract.deploy({
+      data: bin,
+      arguments: []
+    });
+  }
+
 
   /**
    * Private method which deploys OptimalWalletCreator contract.

@@ -63,7 +63,7 @@ const ContractName = 'OptimalWalletCreator';
       return Promise.reject(err);
     }
 
-    const tx = OptimalWalletCreator.deployRawTx(auxiliaryWeb3, , ubtContractAddr, userWalletFactoryContractAddr, organizationAddr);
+    const tx = OptimalWalletCreator.deployRawTx(auxiliaryWeb3, ubtContractAddr, userWalletFactoryContractAddr, organizationAddr);
 
     return Utils.sendTransaction(tx, txOptions).then((txReceipt) => {
       const address = txReceipt.contractAddress;
