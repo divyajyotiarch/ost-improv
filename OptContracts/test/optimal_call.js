@@ -4,19 +4,32 @@ const Utils = require('./test_lib/utils.js');
 const web3 = require('./test_lib/web3.js');
 const { Event } = require('./test_lib/event_decoder');
 const { AccountProvider } = require('./test_lib/utils.js');
-
 const OptimalWalletCreator = artifacts.require('OptimalWalletCreator');
 
 contract('OptimalWalletCreator::optimalCall', async (accounts) => {
-    const accountProvider = new AccountProvider(accounts);
-    const internalActors = [];
-    internalActors.push(accountProvider.get());
 
+    let ubtContractAddr;
+    let walletFactoryContractAddr;
+    let organizationAddr;
+    let accountProvider;
+    let internalActors = [];
+    let optimalWalletCreator;
+    
+    beforeEach(async () => {
+        
+        accountProvider = new Utils.AccountProvider(accounts);
+        ubtContractAddr = accountProvider.get();
+        walletFactoryContractAddr = accountProvider.get();
+        organizationAddr = accountProvider.get();
+        internalActors.push(accountProvider.get());
+        optimalWalletCreator = await OptimalWalletCreator.new(ubtContractAddr,walletFactoryContractAddr,organizationAddr);
+       
+      });
+   
     //negative test cases similar to the createUserWallet. 
     contract('Negative Tests', async () => {
         it('Reverts if gnosis safe\'s master copy address is null.', async () => {
-          const optimalWalletCreator = await OptimalWalletCreator.new();
-        
+         
           await Utils.expectRevert(
             optimalWalletCreator.optimalCall(
               Utils.NULL_ADDRESS, // gnosis safe's master copy
@@ -28,6 +41,7 @@ contract('OptimalWalletCreator::optimalCall', async (accounts) => {
               [], // session keys' spending limits
               [], // session keys' expiration heights
               internalActors,
+              {from : optimalWalletCreator.address}
             ),
             'Should revert as the master copy address is null.',
             'Master copy address is null.',
@@ -35,8 +49,7 @@ contract('OptimalWalletCreator::optimalCall', async (accounts) => {
         });
     
         it('Reverts if token holder\'s master copy address is null.', async () => {
-          const optimalWalletCreator = await OptimalWalletCreator.new();
-    
+         
           await Utils.expectRevert(
             optimalWalletCreator.optimalCall(
               accountProvider.get(), // gnosis safe's master copy
@@ -48,6 +61,7 @@ contract('OptimalWalletCreator::optimalCall', async (accounts) => {
               [], // session keys' spending limits
               [], // session keys' expiration heights
               internalActors,
+              {from : optimalWalletCreator.address}
             ),
             'Should revert as the master copy address is null.',
             'Master copy address is null.',
@@ -57,6 +71,7 @@ contract('OptimalWalletCreator::optimalCall', async (accounts) => {
 
       contract('Optimal Create Call', async () => {
           it('Reverts if non-worker address is doing function calls', async () => {
+
             const internalActors = [];
             internalActors.push(accountProvider.get());
             const nonWorker = accountProvider.get();
@@ -78,7 +93,4 @@ contract('OptimalWalletCreator::optimalCall', async (accounts) => {
             'Only whitelisted workers are allowed to call this method.');
           });
       });
-
-    
-
-} );
+});

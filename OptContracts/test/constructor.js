@@ -10,6 +10,7 @@ contract('OptimalWalletCreator::constructor', async(accounts) => {
    
     let ubtContractAddr;
     let walletFactoryContractAddr;
+    let organizationAddr;
     let accountProvider;
     
     beforeEach(async () => {
@@ -17,15 +18,27 @@ contract('OptimalWalletCreator::constructor', async(accounts) => {
         accountProvider = new utils.AccountProvider(accounts);
         ubtContractAddr = accountProvider.get();
         walletFactoryContractAddr = accountProvider.get();
+        organizationAddr = accountProvider.get();
        
       });
 
 
       contract('Negative Tests', async () => {
+        it('Reverts if null address is passed as organizationAddr', async () => {
+          await utils.expectRevert(OptimalWalletCreator.new(
+            ubtContractAddr,
+            walletFactoryContractAddr,
+            utils.NULL_ADDRESS,
+          ),
+          'Organization contract address should not be zero',
+          'Organization contract address must not be zero.');
+        });
+
         it('Reverts if null address is passed as ubtContractAddr', async () => {
           await utils.expectRevert(OptimalWalletCreator.new(
             utils.NULL_ADDRESS,
             walletFactoryContractAddr,
+            organizationAddr,
           ),
           'Utility Brand Token contract address should not be zero',
           'Utility Brand Token contract address must not be zero.');
@@ -35,6 +48,7 @@ contract('OptimalWalletCreator::constructor', async(accounts) => {
             await utils.expectRevert(OptimalWalletCreator.new(
               ubtContractAddr,
               utils.NULL_ADDRESS,
+              organizationAddr,
             ),
             'UserWalletFactory contract address should not be zero',
             'UserWalletFactory contract address must not be zero.');
@@ -45,6 +59,7 @@ contract('OptimalWalletCreator::constructor', async(accounts) => {
         it('Successfully sets state variables', async () => {
             await utils.expectRevert(OptimalWalletCreator.new(
                 ubtContractAddr,
+                organizationAddr,
                 walletFactoryContractAddr,
             ),
             'Error in setting state variables.'

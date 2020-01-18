@@ -19,9 +19,11 @@ contract OptimalWalletCreator is Organized {
 
     constructor(
         address _ubtContractAddr,
-        address _walletFactoryContractAddr
+        address _walletFactoryContractAddr,
+        OrganizationInterface _organization
     )
-    public
+        public
+        Organized(_organization)
     {
         userWalletFactory = UserWalletFactory(_walletFactoryContractAddr);
         utilityBrandedToken = UtilityBrandedToken(_ubtContractAddr);
@@ -51,36 +53,38 @@ contract OptimalWalletCreator is Organized {
 
     function optimalCall(
         address _gnosisSafeMasterCopy,
-        bytes calldata _gnosisSafeData,
+        bytes memory _gnosisSafeData,
         address _tokenHolderMasterCopy,
         address _token,
         address _tokenRules,
-        address[] calldata _sessionKeys,
-        uint256[] calldata _sessionKeysSpendingLimits,
-        uint256[] calldata _sessionKeysExpirationHeights,
-        address[] calldata _internalActors
+        address[] memory _sessionKeys,
+        uint256[] memory _sessionKeysSpendingLimits,
+        uint256[] memory _sessionKeysExpirationHeights,
+        address[] memory _internalActors
     )
-        external
+        public
         onlyWorker
     {
-        userWalletFactory.createUserWallet(
-        _gnosisSafeMasterCopy,
-        _gnosisSafeData,
-        _tokenHolderMasterCopy,
-        _token,
-        _tokenRules,
-        _sessionKeys,
-        _sessionKeysSpendingLimits,
-        _sessionKeysExpirationHeights
-        );
-        /*
-        first call to createWalletUser with all above parameters
-        */
 
-        utilityBrandedToken.registerInternalActors(_internalActors);
+        userWalletFactory.createUserWallet(
+            _gnosisSafeMasterCopy,
+            _gnosisSafeData,
+            _tokenHolderMasterCopy,
+            _token,
+            _tokenRules,
+            _sessionKeys,
+            _sessionKeysSpendingLimits,
+            _sessionKeysExpirationHeights
+        );
+
         /*
-        * second call to registerInternalActors from UtilityBrandedToken
-        * considering that this contract is set as a worker already by the organization
-        */
+         * first call to createWalletUser with all above parameters
+         */
+        utilityBrandedToken.registerInternalActors(_internalActors);
+
+        /*
+         * second call to registerInternalActors from UtilityBrandedToken
+         * considering that this contract is set as a worker already by the organization
+         */
     }
 }
