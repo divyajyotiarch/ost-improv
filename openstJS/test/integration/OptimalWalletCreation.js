@@ -41,7 +41,7 @@ let auxiliaryWeb3,
 describe('Optimal Wallet Creation', async function() {
   before(async function() {
     const { rpcEndpoint } = await dockerSetup();
-    auxiliaryWeb3 = new Web3(rpcEndpoint);
+    auxiliaryWeb3 = await new Web3(rpcEndpoint); 
     const accountsOrigin = await auxiliaryWeb3.eth.getAccounts();
     deployerAddress = accountsOrigin[0];
     worker = accountsOrigin[1];
@@ -150,9 +150,15 @@ describe('Optimal Wallet Creation', async function() {
 	    optimalWalletCreatorAddress = optimalWalletCreatorResponse.receipt.contractAddress;
       optimalWalletCreatorInstance = optimalWalletCreatorResponse.instance;
       */
+      const TxOptions = {
+      from: deployerAddress,
+      gasPrice: config.gasPrice,
+      gas: 9000000
+    };
+
       optimalWalletCreatorInstance = await OptimalWalletCreator.deploy(
         auxiliaryWeb3,
-        txOptions,
+        TxOptions,
         ubtContractAddr,
         userWalletFactoryAddress,
         organizationAddr
@@ -164,7 +170,7 @@ describe('Optimal Wallet Creation', async function() {
 
 	it('Calls setWorker() method from Organization contract', async function() {
 
-		const response = await organizationContractInstance.methods.setWorker(optimalWalletCreatorAddress, config.workerExpirationHeight).call();
+		const response = await organizationContractInstance.setWorker(optimalWalletCreatorAddress, config.workerExpirationHeight).call();
 		assert.strictEqual(response.status, true, 'Setting OptimalWalletCreator Contract as worker failed.');
 		let returnValues = response.events.WorkerSet.returnValues;
     	let workerSetEvent = JSON.parse(JSON.stringify(returnValues));
@@ -174,6 +180,9 @@ describe('Optimal Wallet Creation', async function() {
 	});
 
 	it('Calling optimaCall() method from OptimalWalletCreator contract', async function(){
+    await auxiliaryWeb3.eth.accounts.wallet.create(10);
+
+    ephemeralKey = auxiliaryWeb3.eth.accounts.wallet[0];
 
 	txOptions = {
       from: worker,
@@ -192,6 +201,16 @@ describe('Optimal Wallet Creation', async function() {
       proxyFactoryAddress,
       auxiliaryWeb3
     );
+
+    const owners = [auxiliaryWeb3.eth.accounts.wallet[1].address, auxiliaryWeb3.eth.accounts.wallet[2].address],
+    threshold = 1,
+    sessionKeys = [ephemeralKey.address],
+    sessionKeysSpendingLimits = [config.sessionKeySpendingLimit],
+    sessionKeysExpirationHeights = [config.sessionKeyExpirationHeight];
+
+    const recoveryOwnerAddress = auxiliaryWeb3.eth.accounts.wallet[7].address;
+    const recoveryControllerAddress = auxiliaryWeb3.eth.accounts.wallet[8].address;
+    const recoveryBlockDelay = 10;
 
 	  const response = await userInstance.optimalCall(
       owners,
