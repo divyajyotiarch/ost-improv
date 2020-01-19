@@ -6,24 +6,21 @@
 
 'use strict';
 
-const OpenSTContracts = require('@openst/openst-contracts');
 const OptContracts = require('@divyajyoti/ost-improv-contracts');
 const Linker = require('../utils/linker');
 
 /**
  * The class provides getter to get ABIs and BINs for different contracts.
- * ABI and BIN comes from openst-contracts npm package.
+ * ABI and BIN comes from ost-opt-contracts npm package.
  */
-class AbiBinProvider {
+class AbiBinOpt {
   /**
    * Constructor for AbiBinProvider.
    */
   constructor() {
     this.custom = {};
-    this.openstContracts = {};
     this.optContracts = {};
     // Flattens openst and gnosis object
-    this.flattenOpenstContracts();
     this.flattenOptContracts();
   }
 
@@ -90,7 +87,7 @@ class AbiBinProvider {
     if (this.custom && this.custom[contractName] && this.custom[contractName].abi) {
       return this.custom[contractName].abi;
     }
-    const contract = this.openstContracts[contractName];
+    const contract = this.optContracts[contractName];
     if (!contract) {
       throw new Error(`Could not retrieve ABI for ${contractName}, because the contract doesn't exist.`);
     }
@@ -109,7 +106,7 @@ class AbiBinProvider {
       return this.custom[contractName].bin;
     }
 
-    const contract = this.openstContracts[contractName];
+    const contract = this.optContracts[contractName];
     if (!contract) {
       throw new Error(`Could not retrieve bin for ${contractName}, because the contract doesn't exist.`);
     }
@@ -148,14 +145,9 @@ class AbiBinProvider {
     return Linker.linkBytecode(bin, libraries);
   }
 
-  flattenOpenstContracts() {
-    this.openstContracts = OpenSTContracts.openst;
-    Object.assign(this.openstContracts, OpenSTContracts.gnosis);
-  }
-
   static get Linker() {
     return Linker;
   }
 }
 
-module.exports = AbiBinProvider;
+module.exports = AbiBinOpt;

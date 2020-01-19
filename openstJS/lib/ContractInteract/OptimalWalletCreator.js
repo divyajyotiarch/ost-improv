@@ -1,7 +1,7 @@
 'use strict';
 
 const Web3 = require('web3');
-const AbiBinProvider = require('./../AbiBinProvider');
+const AbiBinOpt = require('../AbiBinOpt');
 const Contracts = require('../Contracts');
 
 const Utils = require('../../utils/Utils');
@@ -77,15 +77,16 @@ const ContractName = 'OptimalWalletCreator';
    * @param {Web3} auxiliaryWeb3 Auxiliary chain web3 object.
    * @param {address} ubtContractAddr UtilityBrandedToken Contract address
    * @param {address} userWalletFactoryContractAddr UserWalletFactory Contract address
-   *
+   * @param {address} organizationAddr Organization Contract Address
+   * 
    * @returns {Object} Raw transaction object.
    */
   static deployRawTx(auxiliaryWeb3, ubtContractAddr, userWalletFactoryContractAddr, organizationAddr) {
     if (!(auxiliaryWeb3 instanceof Web3)) {
       throw new TypeError(`Mandatory Parameter 'auxiliaryWeb3' is missing or invalid: ${auxiliaryWeb3}`);
     }
-    const abiBinProvider = new AbiBinProvider();
-    const bin = abiBinProvider.getBIN(ContractName);
+    const abiBinOpt = new AbiBinOpt();
+    const bin = abiBinOpt.getBIN(ContractName);
 
     const args = [ubtContractAddr, userWalletFactoryContractAddr, organizationAddr];
     const contract = Contracts.getOptimalWalletCreator(auxiliaryWeb3);

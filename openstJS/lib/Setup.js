@@ -8,7 +8,7 @@ const Recovery = require('./ContractInteract/Recovery');
 const UserWalletFactory = require('./ContractInteract/UserWalletFactory');
 const ProxyFactory = require('./ContractInteract/ProxyFactory');
 const CreateAndAddModules = require('./ContractInteract/CreateAndAddModules');
-const OptimalWalletCreator = require('./ContractInteract/OptimalWalletCreator');
+//const OptimalWalletCreator = require('./ContractInteract/OptimalWalletCreator');
 
 /**
  * A single function to setup a openst contract.
@@ -26,7 +26,7 @@ const OptimalWalletCreator = require('./ContractInteract/OptimalWalletCreator');
  *                                       proxyFactory contract.
  * @param {Object} createAndAddModulesTxOptions Transaction options to
  *                                       deploy createAndAddModules contract.
- *
+ * 
  * @return {Promise<Object>} Deployed contract instances.
  *
  */
@@ -45,7 +45,6 @@ const setup = async (
   const userWalletFactory = await UserWalletFactory.deploy(auxiliaryWeb3, userWalletFactoryTxOptions);
   const proxyFactory = await ProxyFactory.deploy(auxiliaryWeb3, proxyFactoryTxOptions);
   const createAndAddModules = await CreateAndAddModules.deploy(auxiliaryWeb3, createAndAddModulesTxOptions);
-  const optimalWalletCreator = await OptimalWalletCreator.deploy(auxiliaryWeb3, optimalWalletCreatorTxOptions);
 
   return {
     tokenHolder,
@@ -54,7 +53,6 @@ const setup = async (
     userWalletFactory,
     proxyFactory,
     createAndAddModules,
-    optimalWalletCreator
   };
 };
 

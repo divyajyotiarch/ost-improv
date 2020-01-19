@@ -2,9 +2,11 @@
 
 const Web3 = require('web3');
 const AbiBinProvider = require('./AbiBinProvider');
+const AbiBinOpt = require('./AbiBinOpt');
 const { Contracts } = require('@openst/mosaic.js');
 
 const abiBinProvider = new AbiBinProvider();
+const abiBinOpt = new AbiBinOpt();
 
 /**
  * The class exposes instance of different contracts. Dappy can use the
@@ -177,7 +179,7 @@ class OpenSTContracts extends Contracts {
    */
 
    static getOptimalWalletCreator(auxiliaryWeb3,address,options) {
-    const jsonInterface = abiBinProvider.getABI('OptimalWalletCreator');
+    const jsonInterface = abiBinOpt.getABI('OptimalWalletCreator');
     return new auxiliaryWeb3.eth.Contract(jsonInterface, address, options);
    }
 

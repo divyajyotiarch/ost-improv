@@ -1,6 +1,7 @@
 'use strict';
 
 const AbiBinProvider = require('./../AbiBinProvider');
+const AbiBinOpt = require('../AbiBinOpt');
 const Deployer = require('./../../utils/DeployContract');
 const Utils = require('../../utils/Utils');
 
@@ -24,6 +25,7 @@ class User {
     const oThis = this;
     oThis.auxiliaryWeb3 = auxiliaryWeb3;
     oThis.abiBinProvider = new AbiBinProvider();
+    oThis.abiBinOpt = new AbiBinOpt();
   }
 
   /**
@@ -288,9 +290,9 @@ class User {
   _deployOptimalWalletCreatorRawTx(ubtContractAddr, userWalletFactoryContractAddr, organizationAddr) {
     const oThis = this;
 
-    const abiBinProvider = oThis.abiBinProvider;
-    const jsonInterface = abiBinProvider.getABI(OptimalWalletCreatorContractName);
-    const bin = abiBinProvider.getBIN(OptimalWalletCreatorContractName);
+    const abiBinOpt = oThis.abiBinOpt;
+    const jsonInterface = abiBinOpt.getABI(OptimalWalletCreatorContractName);
+    const bin = abiBinOpt.getBIN(OptimalWalletCreatorContractName);
 
     const contract = new oThis.auxiliaryWeb3.eth.Contract(jsonInterface, null);
 
