@@ -169,7 +169,7 @@ class OpenSTContracts extends Contracts {
     return new auxiliaryWeb3.eth.Contract(jsonInterface, address, options);
   }
 
-  /**     ////////////////////////////////////////////////////////////////
+  /**
    * Static method which returns OptimalWalletCreator contract instance.
    *
    * @param auxiliaryWeb3 Auxiliary web3 object.
@@ -178,7 +178,7 @@ class OpenSTContracts extends Contracts {
    * @returns {auxiliaryWeb3Object.eth.Contract}
    */
 
-   static getOptimalWalletCreator(auxiliaryWeb3,address,options) {
+  static getOptimalWalletCreator(auxiliaryWeb3,address,options) {
     const jsonInterface = abiBinOpt.getABI('OptimalWalletCreator');
     return new auxiliaryWeb3.eth.Contract(jsonInterface, address, options);
    }

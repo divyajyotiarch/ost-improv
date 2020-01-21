@@ -28,13 +28,12 @@
     "pre-commit": "lint-staged"
   },
   "dependencies": {
-    "@divyajyoti/ost-improv-contracts": "1.0.3",
+    "@divyajyoti/ost-improv-contracts": "1.0.7",
     "@openst/brandedtoken-contracts": ">=0.10.0 <0.11.0",
     "@openst/brandedtoken.js": ">=0.10.0 <0.11.0",
     "@openst/mosaic.js": ">=0.10.0 <0.11.0",
     "@openst/openst-contracts": ">=0.10.0 <0.11.0",
-    "web3": "^1.2.5-rc.0",
-    "web3-eth-accounts": "^1.2.5-rc.0"
+    "web3": "^1.2.5-rc.0"
   },
   "devDependencies": {
     "@babel/core": "7.1.0",

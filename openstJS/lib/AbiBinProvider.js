@@ -7,7 +7,7 @@
 'use strict';
 
 const OpenSTContracts = require('@openst/openst-contracts');
-const OptContracts = require('@divyajyoti/ost-improv-contracts');
+
 const Linker = require('../utils/linker');
 
 /**
@@ -21,15 +21,8 @@ class AbiBinProvider {
   constructor() {
     this.custom = {};
     this.openstContracts = {};
-    this.optContracts = {};
     // Flattens openst and gnosis object
     this.flattenOpenstContracts();
-    this.flattenOptContracts();
-  }
-
-  flattenOptContracts(){
-    this.optContracts = OptContracts.openst;
-    Object.assign(this.optContracts, OptContracts.gnosis);
   }
 
   /**

@@ -33,15 +33,20 @@ class DeployContract {
     let receipt = null,
       transactionHash = null;
 
+    console.log("Deploying ", oThis.contractName);
     let instance = await oThis.txObject
       .send(oThis.txOptions)
       .on('receipt', function(value) {
+        console.log("receipt of deployed contract");
+        console.log( JSON.stringify(value));
         receipt = value;
       })
       .on('transactionHash', function(value) {
         transactionHash = value;
       })
       .on('error', function(error) {
+        console.log("error deploying contract");
+        console.log( JSON.stringify(error));
         return Promise.reject(error);
       });
 

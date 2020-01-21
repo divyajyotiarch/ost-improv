@@ -1,6 +1,7 @@
 'use strict';
 
 const AbiBinProvider = require('./lib/AbiBinProvider');
+const AbiBinOpt = require('./lib/AbiBinOpt');
 const Contracts = require('./lib/Contracts');
 const TokenRulesSetup = require('./lib/setup/TokenRules');
 const User = require('./lib/setup/User');

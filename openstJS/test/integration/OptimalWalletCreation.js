@@ -12,8 +12,6 @@ const { Contracts } = Package;
 const { Organization } = Package.ContractInteract;
 const { UtilityBrandedToken } = Package.ContractInteract;
 const { OptimalWalletCreator } = Package.ContractInteract;
-const TokenHolderHelper = Package.Helpers.TokenHolder;
-const abiBinProvider = new Package.AbiBinProvider();
 
 let auxiliaryWeb3,
   deployerAddress,
@@ -144,21 +142,15 @@ describe('Optimal Wallet Creation', async function() {
 	  });
 
 	it('Performs setup of OptimalWalletCreator contract', async function() {
-/*	    const userSetup = new UserSetup(auxiliaryWeb3);
-
-	    const optimalWalletCreatorResponse = await userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryAddress, organizationAddr);
-	    optimalWalletCreatorAddress = optimalWalletCreatorResponse.receipt.contractAddress;
-      optimalWalletCreatorInstance = optimalWalletCreatorResponse.instance;
-      */
-      const TxOptions = {
-      from: deployerAddress,
-      gasPrice: config.gasPrice,
-      gas: 9000000
-    };
-
+	    // const userSetup = new UserSetup(auxiliaryWeb3);  
+      // console.log('txOptions: ', txOptions);
+	    // const optimalWalletCreatorResponse = await userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryAddress, organizationAddr);
+	    // optimalWalletCreatorAddress = optimalWalletCreatorResponse.receipt.contractAddress;
+      // optimalWalletCreatorInstance = optimalWalletCreatorResponse.instance;
+      
       optimalWalletCreatorInstance = await OptimalWalletCreator.deploy(
         auxiliaryWeb3,
-        TxOptions,
+        txOptions,
         ubtContractAddr,
         userWalletFactoryAddress,
         organizationAddr
@@ -168,14 +160,21 @@ describe('Optimal Wallet Creation', async function() {
 
 	  });
 
-	it('Calls setWorker() method from Organization contract', async function() {
+	it('Calls setWorker() method on Organization contract', async function() {
 
-		const response = await organizationContractInstance.setWorker(optimalWalletCreatorAddress, config.workerExpirationHeight).call();
+    //const response = await organizationContractInstance.setWorker(optimalWalletCreatorAddress, config.workerExpirationHeight).call();
+
+    const response = await organizationContractInstance.methods.setWorker(
+      deployerAddress, 
+      config.workerExpirationHeight,
+      { from: deployerAddress }
+      ).call();
+
 		assert.strictEqual(response.status, true, 'Setting OptimalWalletCreator Contract as worker failed.');
 		let returnValues = response.events.WorkerSet.returnValues;
     	let workerSetEvent = JSON.parse(JSON.stringify(returnValues));
     	Workers.append(workerSetEvent.worker);
-    	assert.strictEqual(workerSetEvent.worker, optimalWalletCreatorAddress, 'OptimalWalletCreator as worker not set');
+    //	assert.strictEqual(workerSetEvent.worker, optimalWalletCreatorAddress, 'OptimalWalletCreator as worker not set');
 
 	});
 
@@ -184,7 +183,7 @@ describe('Optimal Wallet Creation', async function() {
 
     ephemeralKey = auxiliaryWeb3.eth.accounts.wallet[0];
 
-	txOptions = {
+	  txOptions = {
       from: worker,
       gasPrice: config.gasPrice,
       gas: config.gas
@@ -221,7 +220,6 @@ describe('Optimal Wallet Creation', async function() {
       sessionKeys,
       sessionKeysSpendingLimits,
       sessionKeysExpirationHeights,
-      Workers,
       txOptions
     );
 

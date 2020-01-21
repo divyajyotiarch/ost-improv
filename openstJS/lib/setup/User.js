@@ -139,6 +139,7 @@ class User {
    * @param txOptions Tx options.
    * @param {address} ubtContractAddr UtilityBrandedToken Contract address
    * @param {address} userWalletFactoryContractAddr UserWalletFactory Contract address
+   * @param {address} organizationAddr Organization Contract address
    *
    * @returns {Object} - Transaction receipt.
    */
@@ -256,7 +257,8 @@ class User {
       arguments: []
     });
   }
-/**
+
+  /**
    * Private method which deploys UserWalletFactory contract.
    *
    * @returns {txObject} Transaction object.
@@ -269,6 +271,7 @@ class User {
     const jsonInterface = abiBinProvider.getABI(UserWalletFactoryContractName);
     const bin = abiBinProvider.getBIN(UserWalletFactoryContractName);
 
+    console.log("_deployUserWalletFactoryRawTx :: bin", bin);
     const contract = new oThis.auxiliaryWeb3.eth.Contract(jsonInterface, null);
 
     return contract.deploy({
@@ -277,12 +280,12 @@ class User {
     });
   }
 
-
-  /**
+    /**
    * Private method which deploys OptimalWalletCreator contract.
    *
    * @param {address} ubtContractAddr UtilityBrandedToken Contract address
    * @param {address} userWalletFactoryContractAddr UserWalletFactory Contract address
+   * @param {address} organizationAddr Organization Contract address
    *
    * @returns {txObject} Transaction object.
    * @private
@@ -294,6 +297,12 @@ class User {
     const jsonInterface = abiBinOpt.getABI(OptimalWalletCreatorContractName);
     const bin = abiBinOpt.getBIN(OptimalWalletCreatorContractName);
 
+    console.log("|| _deployOptimalWalletCreatorRawTx :: jsonInterface", JSON.stringify(jsonInterface, null, 2 ));
+    console.log("|| _deployOptimalWalletCreatorRawTx :: bin", bin);
+    console.log("|| ubtContractAddr", ubtContractAddr);
+    console.log("|| userWalletFactoryContractAddr", userWalletFactoryContractAddr);
+    console.log("|| organizationAddr", organizationAddr);
+
     const contract = new oThis.auxiliaryWeb3.eth.Contract(jsonInterface, null);
 
     return contract.deploy({
@@ -301,6 +310,7 @@ class User {
       arguments: [ubtContractAddr, userWalletFactoryContractAddr, organizationAddr]
     });
   }
+
 
   /**
    * Private method which deploys ProxyFactory contract.
