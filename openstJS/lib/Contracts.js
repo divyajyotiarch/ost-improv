@@ -184,6 +184,23 @@ class OpenSTContracts extends Contracts {
    }
 
   /**
+   * Static method which returns Organization contract instance.
+   *
+   * @param auxiliaryWeb3 Auxiliary web3 object.
+   * @param address OptimalWalletCreator contract address.
+   * @param options Tx options object.
+   * @returns {auxiliaryWeb3Object.eth.Contract}
+   */
+
+  static getOrganization(web3, address, options) {
+    const web3Obj = Contracts._getWeb3(web3);
+    const contractName = 'Organization';
+    const jsonInterface = abiBinProvider.getABI(contractName);
+    const contract = new web3Obj.eth.Contract(jsonInterface, address, options);
+    return contract;
+  }
+
+  /**
    * Static method which returns ProxyFactory contract instance.
    *
    * @param auxiliaryWeb3 Auxiliary web3 object.

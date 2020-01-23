@@ -88,6 +88,8 @@ const ContractName = 'OptimalWalletCreator';
     const abiBinOpt = new AbiBinOpt();
     const bin = abiBinOpt.getBIN(ContractName);
 
+    console.log("optimal contract bin: ", bin);
+
     const args = [ubtContractAddr, userWalletFactoryContractAddr, organizationAddr];
     const contract = Contracts.getOptimalWalletCreator(auxiliaryWeb3);
 

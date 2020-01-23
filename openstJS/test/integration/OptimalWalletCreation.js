@@ -30,6 +30,7 @@ let auxiliaryWeb3,
   gnosisSafeProxyInstance,
   txOptions,
   tokenHolderHelperObject,
+  organization,
   organizationAddr,
   ubtContractAddr,
   optimalWalletCreatorAddress,
@@ -50,13 +51,7 @@ describe('Optimal Wallet Creation', async function() {
       gasPrice: config.gasPrice,
       gas: config.gas
     };
-  });
 
-  after(() => {
-    dockerTeardown();
-  });
-
-  it('Performs initial setup for economy', async function() {
     const orgConfig = {
       deployer: deployerAddress,
       owner: deployerAddress,
@@ -65,8 +60,26 @@ describe('Optimal Wallet Creation', async function() {
       workerExpirationHeight: config.workerExpirationHeight
     };
     organizationContractInstance = await Organization.setup(auxiliaryWeb3, orgConfig, txOptions);
-    const organization = organizationContractInstance.address;
+    organization = organizationContractInstance.address;
     organizationAddr = organization;
+
+  });
+
+  after(() => {
+    dockerTeardown();
+  });
+
+  it('Performs initial setup for economy', async function() {
+    // const orgConfig = {
+    //   deployer: deployerAddress,
+    //   owner: deployerAddress,
+    //   admin: worker,
+    //   workers: Workers,
+    //   workerExpirationHeight: config.workerExpirationHeight
+    // };
+    // organizationContractInstance = await Organization.setup(auxiliaryWeb3, orgConfig, txOptions);
+    // const organization = organizationContractInstance.address;
+    // organizationAddr = organization;
     assert.isNotNull(organization, 'Organization contract address should not be null.');
 
     const deployerInstance = new MockContractsDeployer(deployerAddress, auxiliaryWeb3);
@@ -81,6 +94,7 @@ describe('Optimal Wallet Creation', async function() {
     tokenRulesAddress = response.receipt.contractAddress;
 
     const contractInstance = Contracts.getTokenRules(auxiliaryWeb3, response.receipt.contractAddress, txOptions);
+    console.log("CONTRACT INSTANCE TOKEN RULES ", JSON.stringify(await contractInstance.methods.token().call()));
 
     // Verifying stored organization and token address.
     assert.strictEqual(eip20Token, await contractInstance.methods.token().call(), 'Token address is incorrect');
@@ -142,39 +156,44 @@ describe('Optimal Wallet Creation', async function() {
 	  });
 
 	it('Performs setup of OptimalWalletCreator contract', async function() {
-	    // const userSetup = new UserSetup(auxiliaryWeb3);  
-      // console.log('txOptions: ', txOptions);
-	    // const optimalWalletCreatorResponse = await userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryAddress, organizationAddr);
-	    // optimalWalletCreatorAddress = optimalWalletCreatorResponse.receipt.contractAddress;
+	    const userSetup = new UserSetup(auxiliaryWeb3);  
+	    const optimalWalletCreatorResponse = await userSetup.deployOptimalWalletCreator(txOptions, ubtContractAddr, userWalletFactoryAddress, organizationAddr);
+	    optimalWalletCreatorAddress = optimalWalletCreatorResponse.receipt.contractAddress;
       // optimalWalletCreatorInstance = optimalWalletCreatorResponse.instance;
       
-      optimalWalletCreatorInstance = await OptimalWalletCreator.deploy(
-        auxiliaryWeb3,
-        txOptions,
-        ubtContractAddr,
-        userWalletFactoryAddress,
-        organizationAddr
-      )
-      optimalWalletCreatorAddress = optimalWalletCreatorInstance.address;
-	    assert.isNotNull(optimalWalletCreatorAddress, 'OptimalWalletCreator contract address should not be null.');
+      // optimalWalletCreatorInstance = await OptimalWalletCreator.deploy(
+      //   auxiliaryWeb3,
+      //   txOptions,
+      //   ubtContractAddr,
+      //   userWalletFactoryAddress,
+      //   organizationAddr
+      // )
+      // optimalWalletCreatorAddress = optimalWalletCreatorInstance.address;
+	    // assert.isNotNull(optimalWalletCreatorAddress, 'OptimalWalletCreator contract address should not be null.');
 
 	  });
 
 	it('Calls setWorker() method on Organization contract', async function() {
 
-    //const response = await organizationContractInstance.setWorker(optimalWalletCreatorAddress, config.workerExpirationHeight).call();
-
-    const response = await organizationContractInstance.methods.setWorker(
+    const instance = await Contracts.getOrganization(auxiliaryWeb3, organizationAddr, txOptions);
+    //const instance = new Organization(auxiliaryWeb3, organizationAddr);
+    console.log("organization address from instance1 ", await instance.methods.isWorker(deployerAddress).call(txOptions));
+    const response = await instance.methods.setWorker(
       deployerAddress, 
-      config.workerExpirationHeight,
-      { from: deployerAddress }
-      ).call();
+      config.workerExpirationHeight
+    ).send(
+      txOptions,
+      function(err, result){ console.log(err ,result);  }
+      );
 
-		assert.strictEqual(response.status, true, 'Setting OptimalWalletCreator Contract as worker failed.');
-		let returnValues = response.events.WorkerSet.returnValues;
-    	let workerSetEvent = JSON.parse(JSON.stringify(returnValues));
-    	Workers.append(workerSetEvent.worker);
-    //	assert.strictEqual(workerSetEvent.worker, optimalWalletCreatorAddress, 'OptimalWalletCreator as worker not set');
+      console.log("organization address from instance2 ", await instance.methods.isWorker(deployerAddress).call(txOptions));
+      console.log("RESPONSE ",response);
+		 assert.strictEqual(response.status, true, 'Setting OptimalWalletCreator Contract as worker failed.');
+		 let returnValues = response.events.WorkerSet.returnValues;
+     let workerSetEvent = JSON.parse(JSON.stringify(returnValues));
+    //   console.log("RETURN VALUE SET WORKER ",JSON.parse(JSON.stringify(returnValues)));
+     //	Workers.append(workerSetEvent.worker);
+    	assert.strictEqual(workerSetEvent.worker, deployerAddress, 'OptimalWalletCreator as worker not set');
 
 	});
 
